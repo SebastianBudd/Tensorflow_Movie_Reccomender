@@ -6,7 +6,7 @@ from tensorflow.keras.models import Model
 
 ratings = pd.read_csv('ml-latest-small/ratings.csv')
 print(ratings.shape)
-train, test = train_test_split(ratings, test_size=0.2, random_state=35)
+train, test = train_test_split(ratings, test_size=0.2, random_state=6)
 
 n_users = ratings.userId.nunique()
 print('n_users =', n_users)
@@ -37,8 +37,6 @@ model = Model([user_input, movie_input], out)
 print(model.summary())
 print('')
 model.compile('adam', 'mean_squared_error')
-
-model.fit([train.userId, train.movieId], train.rating, epochs=5, verbose=True)
 
 history = model.fit([train.userId, train.movieId], train.rating, epochs=5, verbose=True)
 model.save('MovieLensModel')
