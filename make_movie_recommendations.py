@@ -33,7 +33,7 @@ model = keras.models.load_model('MovieLensModel')
 movie_data = np.array(list(set(ratings.movieId)))
 print(movie_data[:5])
 
-user = np.array([1 for i in range(len(movie_data))])
+user = np.array([75 for i in range(len(movie_data))])
 print(user[:5])
 
 predictions = model.predict([user, movie_data])
@@ -42,12 +42,12 @@ predictions = np.array([a[0] for a in predictions])
 print(predictions)
 recommended_movie_ids = (-predictions).argsort()[:5]
 
-print(recommended_movie_ids)
+recommended_movie_ids2 = []
+for x in range(len(recommended_movie_ids)):
+    recommended_movie_ids2.append(backwards[recommended_movie_ids[x]])
 
-# print predicted scores
-print(predictions[recommended_movie_ids])
-
+# print movie recommendations
 movies = pd.read_csv('ml-latest-small/movies.csv')
-print(movies.head())
-
-print(movies[movies['id'].isin(recommended_movie_ids)])
+links = pd.read_csv('ml-latest-small/links.csv')
+print(movies[movies['movieId'].isin(recommended_movie_ids2)])
+print(links[movies['movieId'].isin(recommended_movie_ids2)])

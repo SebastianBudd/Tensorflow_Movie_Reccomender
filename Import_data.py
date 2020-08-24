@@ -2,18 +2,12 @@
 import pandas as pd
 import pickle
 
-links = pd.read_csv('ml-latest-small/links.csv')
-movies = pd.read_csv('ml-latest-small/movies.csv')
 ratings = pd.read_csv('ml-latest-small/ratings.csv')
-tags = pd.read_csv('ml-latest-small/tags.csv')
 
 print(links, movies, ratings, tags)
 
 n_users = len(ratings.userId.unique())
 print('n_users =', n_users)
-
-n_unique_tags = len(tags.tag.unique())
-print('n_unique_tags =', n_unique_tags)
 
 n_movies = ratings.movieId.nunique()
 print('n_movies =', n_movies)
