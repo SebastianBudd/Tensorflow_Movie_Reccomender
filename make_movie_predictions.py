@@ -40,7 +40,7 @@ predictions = model.predict([user, movie_data])
 
 predictions = np.array([a[0] for a in predictions])
 print(predictions)
-recommended_movie_ids = backwards[(-predictions).argsort()[:5]]
+recommended_movie_ids = (-predictions).argsort()[:5]
 
 print(recommended_movie_ids)
 
