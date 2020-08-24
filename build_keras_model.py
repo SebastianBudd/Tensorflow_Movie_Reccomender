@@ -28,9 +28,6 @@ with open('backwards_dict.pkl', 'rb') as b_file:
     backwards = pickle.load(b_file)
     b_file.close()
 
-print(forwards)
-print(type(forwards))
-
 # creating movie embedding path
 movie_input = Input(shape=[1], name="Movie-Input")
 movie_embedding = Embedding(n_movies + 1, 5, name="Movie-Embedding")(movie_input)
