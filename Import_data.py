@@ -4,7 +4,7 @@ import pickle
 
 ratings = pd.read_csv('ml-latest-small/ratings.csv')
 
-print(links, movies, ratings, tags)
+print(ratings)
 
 n_users = len(ratings.userId.unique())
 print('n_users =', n_users)
