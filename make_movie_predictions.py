@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from tensorflow import keras
 
-ratings = pd.read_csv('ml-latest-small/ratings.csv')
+ratings = pd.read_csv('ratings2.csv')
 print(ratings.shape)
 train, test = train_test_split(ratings, test_size=0.2, random_state=6)
 
@@ -17,18 +17,9 @@ print('n_movies =', n_movies)
 uniqueIds = ratings.movieId.unique()
 print(uniqueIds)
 
-# create dictionaries to convert movie Ids to a list of consecutive integers and back to the original ids
-forwards = {}
-backwards = {}
-for x in range(n_movies):
-    forwards.update({uniqueIds[x]: x})
-    backwards.update({x: uniqueIds[x]})
-
-# convert pandas data frame
-for j in range(len(ratings)):
-    ratings.iloc[j, 1] = forwards[ratings.iloc[j, 1]]
-
-print(ratings.head())
+# load dictionaries to convert movie Ids to a list of consecutive integers and back to the original ids
+forwards = json.loads('forwards_dict.json')
+backwards = json.loads('backwards_dict.json')
 
 model = keras.models.load_model('MovieLensModel')
 

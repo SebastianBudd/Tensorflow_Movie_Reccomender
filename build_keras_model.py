@@ -3,8 +3,9 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.layers import Input, Embedding, Flatten, Dense, Concatenate
 from tensorflow.keras.models import Model
+import pickle
 
-ratings = pd.read_csv('ml-latest-small/ratings.csv')
+ratings = pd.read_csv('ratings2.csv')
 print(ratings.shape)
 train, test = train_test_split(ratings, test_size=0.2, random_state=6)
 
@@ -18,18 +19,16 @@ print('n_movies =', n_movies)
 uniqueIds = ratings.movieId.unique()
 print(uniqueIds)
 
-# create dictionaries to convert movie Ids to a list of consecutive integers and back to the original ids
-forwards = {}
-backwards = {}
-for x in range(n_movies):
-    forwards.update({uniqueIds[x]: x})
-    backwards.update({x: uniqueIds[x]})
+# load dictionaries to convert movie Ids to a list of consecutive integers and back to the original ids
+f_file = open('forwards_dict.json', 'w')
+forwards = pickle.load(f_file)
+f_file.close()
 
-# convert pandas data frame
-for j in range(len(ratings)):
-    ratings.iloc[j, 1] = forwards[ratings.iloc[j, 1]]
-
-ratings.head()
+b_file = open('backwards_dict.json', 'w')
+backwards = pickle.load(b_file)
+b_file.close()
+print(forwards)
+print(type(forwards))
 
 # creating movie embedding path
 movie_input = Input(shape=[1], name="Movie-Input")
@@ -64,3 +63,7 @@ plt.ylabel("Training Error")
 predictions = model.predict([test.userId.head(10), test.movieId.head(10)])
 
 [print(predictions[i], test.rating.iloc[i]) for i in range(0, 10)]
+
+results = model.evaluate([test.userId, test.movieId], test.rating)
+print("Evaluate on test data")
+print("test loss, test acc:", results)
