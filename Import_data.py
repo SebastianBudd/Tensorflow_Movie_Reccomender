@@ -32,10 +32,12 @@ for x in range(n_movies):
 f_file = open('forwards_dict.pkl', 'wb')
 pickle.dump(forwards, f_file)
 f_file.close()
+print("Forwards dictionary saved")
 
 b_file = open('backwards_dict.pkl', 'wb')
 pickle.dump(backwards, b_file)
 b_file.close()
+print("Backwards dictionary saved")
 
 ratings2 = ratings
 # convert pandas data frame

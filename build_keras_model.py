@@ -20,13 +20,14 @@ uniqueIds = ratings.movieId.unique()
 print(uniqueIds)
 
 # load dictionaries to convert movie Ids to a list of consecutive integers and back to the original ids
-f_file = open('forwards_dict.json', 'w')
-forwards = pickle.load(f_file)
-f_file.close()
+with open('forwards_dict.pkl', 'rb') as f_file:
+    forwards = pickle.load(f_file)
+    f_file.close()
 
-b_file = open('backwards_dict.json', 'w')
-backwards = pickle.load(b_file)
-b_file.close()
+with open('backwards_dict.pkl', 'rb') as b_file:
+    backwards = pickle.load(b_file)
+    b_file.close()
+
 print(forwards)
 print(type(forwards))
 
