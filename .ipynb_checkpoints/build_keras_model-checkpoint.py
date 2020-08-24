@@ -14,23 +14,6 @@ print('n_users =', n_users)
 n_movies = ratings.movieId.nunique()
 print('n_movies =', n_movies)
 
-# map movie ids to a list of integers from 0 to 9723
-uniqueIds = ratings.movieId.unique()
-print(uniqueIds)
-
-# create dictionaries to convert movie Ids to a list of consecutive integers and back to the original ids
-forwards = {}
-backwards = {}
-for x in range(n_movies):
-    forwards.update({uniqueIds[x]: x})
-    backwards.update({x: uniqueIds[x]})
-
-# convert pandas data frame
-for j in range(len(ratings)):
-    ratings.iloc[j, 1] = forwards[ratings.iloc[j, 1]]
-
-ratings.head()
-
 # creating movie embedding path
 movie_input = Input(shape=[1], name="Movie-Input")
 movie_embedding = Embedding(n_movies + 1, 5, name="Movie-Embedding")(movie_input)
@@ -55,7 +38,7 @@ print(model.summary())
 print('')
 model.compile('adam', 'mean_squared_error')
 
-history = model.fit([train.userId, train.movieId], train.rating, epochs=50, verbose=True)
+history = model.fit([train.userId, train.movieId], train.rating, epochs=5, verbose=True)
 model.save('MovieLensModel')
 plt.plot(history.history['loss'])
 plt.xlabel("Epochs")
