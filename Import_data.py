@@ -38,4 +38,6 @@ ratings2 = ratings
 for j in range(len(ratings)):
     ratings2.iloc[j, 1] = forwards[ratings.iloc[j, 1]]
 
-ratings2.to_csv('ratings2.csv')
+ratings2.to_csv('ratings2.csv', index=False)
+ratings.head()
+ratings2.head()

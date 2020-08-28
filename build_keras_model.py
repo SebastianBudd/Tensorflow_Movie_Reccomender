@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras.layers import Input, Embedding, Flatten, Dense, Concatenate
 from tensorflow.keras.models import Model
 import pickle
+import numpy as np
 
 ratings = pd.read_csv('ratings2.csv')
 print(ratings.shape)
@@ -50,18 +51,33 @@ out = Dense(1)(fc2)
 model = Model([user_input, movie_input], out)
 print(model.summary())
 print('')
-model.compile('adam', 'mean_squared_error')
+model.compile('adam', 'mean_squared_error', metrics=['accuracy'])
 
-history = model.fit([train.userId, train.movieId], train.rating, epochs=50, verbose=True)
+history = model.fit([train.userId, train.movieId], train.rating, epochs=20, verbose=True)
 model.save('MovieLensModel')
-plt.plot(history.history['loss'])
-plt.xlabel("Epochs")
-plt.ylabel("Training Error")
-
-predictions = model.predict([test.userId.head(10), test.movieId.head(10)])
-
-[print(predictions[i], test.rating.iloc[i]) for i in range(0, 10)]
 
 results = model.evaluate([test.userId, test.movieId], test.rating)
-print("Evaluate on test data")
-print("test loss, test acc:", results)
+
+plt.plot(history.history['accuracy'])
+# plt.plot(history.history['val_accuracy'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+# plt.legend(['train', 'test'], loc='upper left')
+plt.savefig('accuracy.png')
+plt.clf()
+plt.plot(history.history['loss'])
+# plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+# plt.legend(['train', 'test'], loc='upper right')
+plt.savefig('loss.png')
+
+movie_data = np.array(list(set(ratings.movieId)))
+user_data = np.array(list(set(ratings.userId)))
+
+for i in range(5):
+    predicted_score = model.predict([user_data[i], movie_data[i]])
+    true_score = test.iloc[i, 2]
+    print(predicted_score, true_score)
